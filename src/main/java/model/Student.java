@@ -7,8 +7,8 @@ package model;
 
 /**
  *
- * @author Robin
+ * @author inoue
  */
-public class User {
+public class Student {
     
 }

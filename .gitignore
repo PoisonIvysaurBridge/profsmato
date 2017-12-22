@@ -25,7 +25,7 @@
 *.log
 #*.sql
 *.sqlite
-DatabaseUtils.java
+*.bak
 
 
 # OS generated files #
@@ -39,7 +39,6 @@ ehthumbs.db
 Thumbs.db
 /build/
 
-*.xml
 
 /nbproject/
 
@@ -57,6 +56,3 @@ local_settings.py
 
 
 .idea/
-
-
-
