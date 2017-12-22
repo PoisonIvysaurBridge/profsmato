@@ -15,7 +15,6 @@
 *.dmg
 *.gz
 *.iso
-
 *.rar
 *.tar
 *.zip
@@ -25,6 +24,8 @@
 *.log
 #*.sql
 *.sqlite
+DatabaseUtils.java
+DataSource.java
 *.bak
 
 
@@ -40,19 +41,20 @@ Thumbs.db
 /build/
 
 
-/nbproject/
-
-
-
-
+# For Django Projects #
+#######################
 *.pyc
 *~
 __pycache__
 myvenv
-db.sqlite3
 /static
-.DS_Store
 local_settings.py
 
 
+# IDE files #
+#############
 .idea/
+/nbproject/
+
+
+
