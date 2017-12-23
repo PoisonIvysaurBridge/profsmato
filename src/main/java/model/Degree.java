@@ -5,10 +5,77 @@
  */
 package model;
 
+import java.sql.Connection;
+
 /**
- *
+ * Represents the Degree object.
  * @author inoue
  */
 public class Degree {
+    
+    // <editor-fold desc="Degree Attribute">
+    /**
+     * This Object's <strong><i>Primary Key</i>, Degree Code</strong>.<br />
+     * Column name <i>DEGREECODE</i>.
+     */
+    private String degreeCode;
+    
+    /**
+     * This Object's <strong>Degree name</strong>.<br />
+     * Column name <i>PROGRAMNAME</i>.
+     */
+    private String programName;
+    // </editor-fold>
+    
+    // <editor-fold desc="Degree Constructor">
+    /**
+     * Empty Constructor.
+     */
+    public Degree(){}
+    
+    /**
+     * Retrieve the Degree data in the Database through Degree Code.
+     * @param degreeCode 
+     */
+    public Degree(String degreeCode){
+        this.retrieveDegree();
+    }
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Degree Methods">
+    /**
+     * Gets this object's Degree Code.
+     * @return this degree's code
+     */
+    public String getDegreeCode() {return degreeCode;}
+
+    /**
+     * Sets the Object's degree code.
+     * @param degreeCode the program code that will be set
+     */
+    public void setDegreeCode(String degreeCode) {this.degreeCode = degreeCode;}
+
+    /**
+     * Gets this object's Program name.
+     * @return this degree's name
+     */
+    public String getProgramName() {return programName;}
+
+    /**
+     * Sets the Object's Program name.
+     * @param programName the program name that will be set
+     */
+    public void setProgramName(String programName) {this.programName = programName;}
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Degree Data Access Object method">
+    /**
+     * Retrieves the Data from the database through the Degree Code.<br />
+     * Called by this Object's constructor.
+     */
+    private void retrieveDegree(){
+        
+    }
+    // </editor-fold>
     
 }

@@ -5,6 +5,13 @@
  */ 
 package model;
 
+import dao.DataSource;
+import java.beans.PropertyVetoException;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -129,7 +136,7 @@ public class Student {
     }
     // </editor-fold>
     
-    // <editor-fold desc="Methods of Student object.">
+    // <editor-fold defaultstate="collapsed" desc="Methods of Student object.">
     /**
      * Gets the student's dlsu email address.
      * @return this student's dlsu email address
@@ -295,7 +302,27 @@ public class Student {
      * DAO method to instantiate the Student Object.
      */
     private void retrieveStudent(){
-        
+        Connection conn = null;
+        PreparedStatement pStmt = null;
+        ResultSet rs = null;
+        String sql = "";
+        try {
+            conn = DataSource.getInstance().getConnection();
+            pStmt = conn.prepareStatement(sql);
+        } catch (IOException 
+                | SQLException 
+                | PropertyVetoException ex) {
+            System.out.println("Student(retrieveStudent)");
+            ex.printStackTrace();
+        }finally{
+            if(conn != null)
+                try{ conn.close();}catch(SQLException e){e.printStackTrace();}
+            if(pStmt != null)
+                try{ pStmt.close();}catch(SQLException e){e.printStackTrace();}
+            if(rs != null)
+                try{ rs.close();}catch(SQLException e){e.printStackTrace();}
+        }
     }
+    
     // </editor-fold>
 }
