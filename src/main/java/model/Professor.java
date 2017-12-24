@@ -5,6 +5,14 @@
  */
 package model;
 
+import dao.DataSource;
+import java.beans.PropertyVetoException;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  *
  * @author Yuta Inoue
@@ -81,6 +89,49 @@ public class Professor {
      * Empty Constructor.
      */
     public Professor(){}
+    
+    /**
+     * Use this Constructor for retrieving the prof in DB.
+     * @param profEmail the identifying field of the professor
+     * @deprecated connection object not being passed
+     * @see Professor#Professor(java.lang.String, java.sql.Connection, java.sql.PreparedStatement, java.sql.ResultSet)
+     */
+    public Professor(String profEmail){
+        this.retrieveProfessor(profEmail);
+    }
+    
+    /**
+     * Use this Constructor for retrieving the Professors in Database.
+     * @param profEmail targeted professor
+     * @param conn continued connection object
+     * @param pStmt continued prepared statement object
+     * @param rs continued result set object
+     * @throws SQLException exception handling is done at College method
+     * @see College#retrieveCollege(java.lang.String)  
+     */
+    public Professor(String profEmail, Connection conn, 
+            PreparedStatement pStmt, ResultSet rs) throws SQLException{
+        this.retrieveProfessorV2(profEmail, conn, pStmt, rs);
+    }
+    
+    /**
+     * Full Constructor.
+     * @param profEmail this professor's email
+     * @param lastname this professor's lastname
+     * @param firstname this professor's firstname
+     * @param about this professor's description
+     * @param profPicture this professor's profile picture path
+     * @param status this professor's status
+     */
+    public Professor(String profEmail, String lastname, String firstname, 
+                     String about, String profPicture, int status) {
+        this.profEmail = profEmail;
+        this.lastname = lastname;
+        this.firstname = firstname;
+        this.about = about;
+        this.profPicture = profPicture;
+        this.status = status;
+    }
     
     // <editor-fold desc="Professor Methods">
     /**
@@ -189,4 +240,77 @@ public class Professor {
     
     // </editor-fold>
     
+    // <editor-fold defaultstate="collapsed" desc="Data Access Object methods">
+    /**
+     * Retrieve Professor from Database.
+     * @param profEmail the targeted professor
+     * @deprecated connection is used ineffectively
+     * @see Professor#retrieveProfessorV2(java.lang.String, java.sql.Connection, java.sql.PreparedStatement, java.sql.ResultSet) 
+     */
+    private void retrieveProfessor(String profEmail){
+        Connection conn = null;
+        PreparedStatement pStmt = null;
+        ResultSet rs = null;
+        String sql = "SELECT        PROFEMAIL, LASTNAME, FIRSTNAME, ABOUT, PROFPICTURE, STATUS "
+                  + " FROM          PROFESSORS "
+                  + " WHERE         PROFEMAIL = ?";
+        try{
+            conn = DataSource.getInstance().getConnection();
+            pStmt = conn.prepareStatement(sql);
+            pStmt.setString(1, profEmail);
+            rs = pStmt.executeQuery();
+            while(rs.next()){
+                this.profEmail = rs.getString("PROFEMAIL");
+                this.lastname = rs.getString("LASTNAME");
+                this.firstname = rs.getString("FIRSTNAME");
+                if(rs.getString("ABOUT") == null){
+                    this.about = firstname + " " + lastname + " is a Professor at De La Salle University.";
+                }else{
+                    this.about = rs.getString("ABOUT");
+                }
+                this.profPicture = rs.getString("PROFPICTURE");
+                this.status = rs.getInt("STATUS");
+            }
+        } catch (IOException | SQLException | PropertyVetoException ex) {
+            ex.printStackTrace();
+        } finally {
+            if(conn != null)
+                try{ conn.close(); } catch(SQLException e){}
+            if(pStmt != null)
+                try{ pStmt.close(); } catch(SQLException e){}
+            if(rs != null)
+                try{ rs.close(); } catch(SQLException e){}
+        }
+    }
+    
+    /**
+     * 
+     * @param profEmail
+     * @param conn
+     * @param pStmt
+     * @param rs
+     * @throws SQLException 
+     */
+    private void retrieveProfessorV2(String profEmail, Connection conn,
+            PreparedStatement pStmt, ResultSet rs) throws SQLException{
+        String sql = "SELECT        PROFEMAIL, LASTNAME, FIRSTNAME, ABOUT, PROFPICTURE, STATUS "
+                  + " FROM          PROFESSORS "
+                  + " WHERE         PROFEMAIL = ?";
+        pStmt = conn.prepareStatement(sql);
+        pStmt.setString(1, profEmail);
+        rs = pStmt.executeQuery();
+        while (rs.next()) {
+            this.profEmail = rs.getString("PROFEMAIL");
+            this.lastname = rs.getString("LASTNAME");
+            this.firstname = rs.getString("FIRSTNAME");
+            if (rs.getString("ABOUT") == null) {
+                this.about = firstname + " " + lastname + " is a Professor at De La Salle University.";
+            } else {
+                this.about = rs.getString("ABOUT");
+            }
+            this.profPicture = rs.getString("PROFPICTURE");
+            this.status = rs.getInt("STATUS");
+        }
+    }
+    // </editor-fold>
 }

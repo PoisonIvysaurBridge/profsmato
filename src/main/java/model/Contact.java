@@ -5,6 +5,11 @@
  */
 package model;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * Represents the Contact of the Student.
  * @author Yuta Inoue
@@ -50,7 +55,8 @@ public class Contact {
     
     /**
      * The <strong>Type of Social Media contact</strong> of the Contact.<br />
-     * Column name <i>CONTACTTYPE</i>.
+     * Column name <i>CONTACTTYPE</i>.<br />
+     * UPDATE: Changed contactType to be part of the Primary Key.
      */
     private int contactType;
     // </editor-fold>
@@ -59,6 +65,11 @@ public class Contact {
      * Empty Constructor.
      */
     public Contact(){}
+    
+    public Contact(String contactDetail, Connection conn, 
+            PreparedStatement pStmt, ResultSet rs) throws SQLException {
+        
+    }
     
     // <editor-fold defaultstate="collapsed" desc="Contact Methods">
     /**
@@ -113,6 +124,10 @@ public class Contact {
      * @param contactType the contact type that will be set
      */
     public void setContactType(int contactType) {this.contactType = contactType;}
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Data Access Object methods">
+    private void retrieveContact(){}
     // </editor-fold>
     
 }

@@ -5,6 +5,13 @@
  */
 package model;
 
+import dao.DataSource;
+import java.beans.PropertyVetoException;
+import java.io.IOException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -35,7 +42,17 @@ public class College {
     /**
      * Empty Constructor.
      */
-    private College(){}
+    public College(){}
+    
+    /**
+     * Constructor will call a method to retrieve Data from Database.
+     * Instantiates the departments ArrayList as well.
+     * @param collegeId the targeted college
+     */
+    public College(String collegeId){
+        this.departments = new ArrayList<>();
+        this.retrieveCollege(collegeId);
+    }
     
     // <editor-fold defaultstate="collapsed" desc="College Methods">
     /**
@@ -73,6 +90,52 @@ public class College {
      * @param departments the departments that will be set
      */
     public void setDepartments(ArrayList<Department> departments) {this.departments = departments;}
+    // </editor-fold>
+    
+    // <editor-fold defaultstate="collapsed" desc="Data Access Object methods">
+    /**
+     * Retrieves Data from database.<br />
+     * Does the Exception Handling for the Connection, PreparedStatment & ResultSet
+     * @param collegeId targeted college
+     */
+    private void retrieveCollege(String collegeId){
+        Connection conn = null;
+        PreparedStatement pStmt = null;
+        ResultSet rs = null;
+        String sql = "SELECT        COLLEGEID, COLLEGENAME "
+                + "   FROM          COLLEGES "
+                + "   WHERE         COLLEGEID = ?";
+        try {
+            conn = DataSource.getInstance().getConnection();
+            pStmt = conn.prepareStatement(sql);
+            pStmt.setString(1, collegeId);
+            rs = pStmt.executeQuery();
+            
+            while(rs.next()){
+                this.collegeId = rs.getString("COLLEGEID");
+                this.collegeName = rs.getString("COLLEGENAME");
+            }
+            
+            pStmt = conn.prepareStatement("SELECT DEPARTMENTID FROM DEPARTMENTS WHERE ATTACHEDCOLLEGE = ?");
+            pStmt.setString(1, this.collegeId);
+            rs = pStmt.executeQuery();
+            
+            while(rs.next()){
+                String departmentId = rs.getString("DEPARTMENTID");
+                this.departments.add(new Department(departmentId, conn, pStmt, rs));
+            }
+            
+        } catch (IOException | SQLException | PropertyVetoException ex) {
+            ex.printStackTrace();
+        } finally{
+            if(conn != null)
+                try{ conn.close(); }catch(SQLException e){ e.printStackTrace(); }
+            if(pStmt != null)
+                try{ pStmt.close(); }catch(SQLException e){ e.printStackTrace(); }
+            if(rs != null)
+                try{ rs.close(); }catch(SQLException e){ e.printStackTrace(); }
+        }
+    }
     // </editor-fold>
     
 }

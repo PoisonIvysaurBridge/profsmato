@@ -25,6 +25,12 @@ public class Degree {
      * Column name <i>PROGRAMNAME</i>.
      */
     private String programName;
+    
+    /**
+     * The Degree's <strong>Attached College</strong>.<br />
+     * Should be full name of the College.<br />
+     */
+    private String attachedCollege;
     // </editor-fold>
     
     // <editor-fold desc="Degree Constructor">
@@ -35,7 +41,7 @@ public class Degree {
     
     /**
      * Retrieve the Degree data in the Database through Degree Code.
-     * @param degreeCode 
+     * @param degreeCode the targeted degree
      */
     public Degree(String degreeCode){
         this.retrieveDegree();
@@ -66,6 +72,22 @@ public class Degree {
      * @param programName the program name that will be set
      */
     public void setProgramName(String programName) {this.programName = programName;}
+    
+    /**
+     * Gets the Object's Attached College name.
+     * @return this degree's attachedCollege
+     */
+    public String getAttachedCollege() {
+        return attachedCollege;
+    }
+    
+    /**
+     * Sets the Object's Attached College name.
+     * @param attachedCollege the attachedCollege that will be set
+     */
+    public void setAttachedCollege(String attachedCollege) {
+        this.attachedCollege = attachedCollege;
+    }
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Degree Data Access Object method">

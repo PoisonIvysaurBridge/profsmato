@@ -170,10 +170,10 @@ DROP TABLE IF EXISTS `profsmato`.`Contacts` ;
 
 CREATE TABLE IF NOT EXISTS `profsmato`.`Contacts` (
   `personId` VARCHAR(50) NOT NULL,
+  `contactType` INT(2) NOT NULL,
   `contactDetail` VARCHAR(60) NOT NULL,
   `persontType` ENUM('student', 'prof') NOT NULL,
-  `contactType` INT(2) NOT NULL,
-  PRIMARY KEY (`personId`, `contactDetail`),
+  PRIMARY KEY (`personId`, `contactType`, `contactDetail`),
   INDEX `fk_Contacts_ref_contact1_idx` (`contactType` ASC),
   CONSTRAINT `fk_Contacts_ref_contact1`
     FOREIGN KEY (`contactType`)
@@ -375,8 +375,8 @@ COMMIT;
 START TRANSACTION;
 USE `profsmato`;
 INSERT INTO `profsmato`.`Departments` (`departmentId`, `attachedCollege`, `departmentName`) VALUES ('CT', 'CCS', 'Computer Technology');
-INSERT INTO `profsmato`.`Departments` (`departmentId`, `attachedCollege`, `departmentName`) VALUES ('ST', 'CCS', 'Information Technology');
-INSERT INTO `profsmato`.`Departments` (`departmentId`, `attachedCollege`, `departmentName`) VALUES ('IT', 'CCS', 'Software Technology');
+INSERT INTO `profsmato`.`Departments` (`departmentId`, `attachedCollege`, `departmentName`) VALUES ('ST', 'CCS', 'Software Technology');
+INSERT INTO `profsmato`.`Departments` (`departmentId`, `attachedCollege`, `departmentName`) VALUES ('IT', 'CCS', 'Information Technology');
 INSERT INTO `profsmato`.`Departments` (`departmentId`, `attachedCollege`, `departmentName`) VALUES ('CEPD', 'BAGCED', 'Counseling and Educational Psychology Department');
 INSERT INTO `profsmato`.`Departments` (`departmentId`, `attachedCollege`, `departmentName`) VALUES ('ELMD', 'BAGCED', 'Educational Leadership and Management Department');
 INSERT INTO `profsmato`.`Departments` (`departmentId`, `attachedCollege`, `departmentName`) VALUES ('DEAL', 'BAGCED', 'Department of English and Applied Linguistics');
