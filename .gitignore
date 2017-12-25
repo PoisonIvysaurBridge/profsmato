@@ -15,7 +15,6 @@
 *.dmg
 *.gz
 *.iso
-
 *.rar
 *.tar
 *.zip
@@ -26,6 +25,8 @@
 #*.sql
 *.sqlite
 DatabaseUtils.java
+DataSource.java
+*.bak
 
 
 # OS generated files #
@@ -39,24 +40,22 @@ ehthumbs.db
 Thumbs.db
 /build/
 
-*.xml
 
-/nbproject/
-
-
-
-
+# For Django Projects #
+#######################
 *.pyc
 *~
 __pycache__
 myvenv
-db.sqlite3
 /static
-.DS_Store
 local_settings.py
 
 
+# IDE files #
+#############
 .idea/
+/nbproject/
 
 
 
+/target/
