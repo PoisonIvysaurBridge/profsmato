@@ -6,6 +6,9 @@
 package model;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Represents the Degree object.
@@ -42,9 +45,14 @@ public class Degree {
     /**
      * Retrieve the Degree data in the Database through Degree Code.
      * @param degreeCode the targeted degree
+     * @param conn continued connection
+     * @param pStmt continued prepared statement
+     * @param rs continued result set
+     * @throws java.sql.SQLException thrown by retrieveDegree method, caught by the servlet
      */
-    public Degree(String degreeCode){
-        this.retrieveDegree();
+    public Degree(String degreeCode, Connection conn, 
+            PreparedStatement pStmt, ResultSet rs) throws SQLException{
+        this.retrieveDegree(degreeCode, conn, pStmt, rs);
     }
     // </editor-fold>
     
@@ -94,9 +102,25 @@ public class Degree {
     /**
      * Retrieves the Data from the database through the Degree Code.<br />
      * Called by this Object's constructor.
+     * @param degreeCode
+     * @param conn
+     * @param pStmt
+     * @param rs 
+     * @throws SQLException thrown by the connection
      */
-    private void retrieveDegree(){
-        
+    private void retrieveDegree(String degreeCode, Connection conn, 
+            PreparedStatement pStmt, ResultSet rs) throws SQLException{
+        String sql = "SELECT		DEGREECODE, (SELECT COLLEGENAME FROM COLLEGES WHERE COLLEGEID = ATTACHEDCOLLEGE) AS ATTACHEDCOLLEGE, PROGRAMNAME "
+                   + "FROM		DEGREES "
+                   + "WHERE		DEGREECODE = ?;";
+        pStmt = conn.prepareStatement(sql);
+        pStmt.setString(1, degreeCode);
+        rs = pStmt.executeQuery();
+        if(rs.next()){
+            this.degreeCode = rs.getString("DEGREECODE");
+            this.attachedCollege = rs.getString("ATTACHEDCOLLEGE");
+            this.programName = rs.getString("PROGRAMNAME");
+        }
     }
     // </editor-fold>
     

@@ -5,9 +5,6 @@
  */ 
 package model;
 
-import dao.DataSource;
-import java.beans.PropertyVetoException;
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -66,6 +63,7 @@ public class Student {
     /**
      * The <strong>Password</strong> for the Student.<br />
      * Encrypted by the database.<br />
+     * Do not store password here unless necessary!!!
      * Column name <i>PASSWORD</i>.
      */
     private String  password;
@@ -129,10 +127,17 @@ public class Student {
     
     /**
      * Constructor's purpose is for the retrieving of the Database.
+     * Note: NOT FOR LOGIN PURPOSE
      * @param studentEmail This Student's email address.
+     * @param conn continued connection
+     * @param pStmt continued prepared statement
+     * @param rs continued result set
+     * @throws SQLException sql exception done at the servlet
      */
-    public Student(String studentEmail){
-        this.retrieveStudent();
+    public Student(String studentEmail, Connection conn, 
+            PreparedStatement pStmt, ResultSet rs) throws SQLException{
+        this.contacts = new ArrayList<>();
+        this.retrieveStudent(studentEmail, conn, pStmt, rs);
     }
     // </editor-fold>
     
@@ -299,28 +304,30 @@ public class Student {
     
     // <editor-fold desc="Data Access Object methods">
     /**
-     * DAO method to instantiate the Student Object.
+     * Simply retrieving the Student from the database
+     * @param studentEmail the targeted Student's email
+     * @param conn the continued connection
+     * @param pStmt the continued prepared statement
+     * @param rs the continued result set
+     * @throws SQLException thrown for the sql handling
      */
-    private void retrieveStudent(){
-        Connection conn = null;
-        PreparedStatement pStmt = null;
-        ResultSet rs = null;
-        String sql = "";
-        try {
-            conn = DataSource.getInstance().getConnection();
-            pStmt = conn.prepareStatement(sql);
-        } catch (IOException 
-                | SQLException 
-                | PropertyVetoException ex) {
-            System.out.println("Student(retrieveStudent)");
-            ex.printStackTrace();
-        }finally{
-            if(conn != null)
-                try{ conn.close();}catch(SQLException e){e.printStackTrace();}
-            if(pStmt != null)
-                try{ pStmt.close();}catch(SQLException e){e.printStackTrace();}
-            if(rs != null)
-                try{ rs.close();}catch(SQLException e){e.printStackTrace();}
+    private void retrieveStudent(String studentEmail, Connection conn, 
+            PreparedStatement pStmt, ResultSet rs) throws SQLException{
+        String sql = "SELECT		STUDENTEMAIL, USERNAME, LASTNAME, FIRSTNAME, PROGRAM, STATUS, ABOUT, PROFILEPIC, USERTYPE " + 
+                     "FROM		STUDENTS " +
+                     "WHERE		STUDENTEMAIL = ?;";
+        pStmt = conn.prepareStatement(sql);
+        pStmt.setString(1, studentEmail);
+        rs = pStmt.executeQuery();
+        while(rs.next()){
+            this.studentEmail = rs.getString("STUDENTEMAIL");
+            this.username = rs.getString("USERNAME");
+            this.lastname = rs.getString("LASTNAME");
+            this.firstname = rs.getString("FIRSTNAME");
+            this.program = new Degree(rs.getString("PROGRAM"), conn, pStmt, rs);
+            this.status = rs.getInt("STATUS");
+            this.profilePicture = rs.getString("PROFILEPIC");
+            this.userType = rs.getString("USERTYPE");
         }
     }
     
