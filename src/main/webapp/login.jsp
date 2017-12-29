@@ -14,18 +14,7 @@ String msg = (String) session.getAttribute("msg");
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Login</title>
-        <!--Link href-->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" type="text/css">
-        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
-        <!-- Bootstrap core CSS -->
-        <link href="/Profsmato/assets/css/bootstrap-material-design.css" rel="stylesheet">
-        <!-- Phantom Five Custom CSS. PUT THIS AFTER THE LINK HREF TO bootstrap-material-design.css -->
-        <link href="/Profsmato/assets/css/Fixes_and_Additional_Classes.css" rel="stylesheet">
-        
-        <!--Script Imports-->
-        <script src="/Profsmato/assets/js/jquery-3.2.1.min.js"></script>
-        <script src="https://unpkg.com/popper.js@1.12.5/dist/umd/popper.js" integrity="sha384-KlVcf2tswD0JOTQnzU4uwqXcbAy57PvV48YUiLjqpk/MJ2wExQhg9tuozn5A1iVw" crossorigin="anonymous"></script>
-        <script src="https://unpkg.com/bootstrap-material-design@4.0.0-beta.3/dist/js/bootstrap-material-design.js" integrity="sha384-hC7RwS0Uz+TOt6rNG8GX0xYCJ2EydZt1HeElNwQqW+3udRol4XwyBfISrNDgQcGA" crossorigin="anonymous"></script>
+        <%@include file="commons/commonLinks.html" %>
         
         <!--Stlye-->
         <style>
