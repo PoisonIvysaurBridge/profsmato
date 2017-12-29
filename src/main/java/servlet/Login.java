@@ -16,6 +16,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import model.Student;
 
 /**
@@ -35,7 +36,17 @@ public class Login extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        request.getRequestDispatcher("login.jsp").forward(request, response);
+        HttpSession session = request.getSession();
+        Student loginUser = (Student) session.getAttribute("loginUser");
+        if(loginUser != null){
+            if(loginUser.getUserType().equals("admin")){
+                response.sendRedirect("AdminMain");
+            }else if(loginUser.getUserType().equals("student")){
+                response.sendRedirect("StudentMain");
+            }
+        }else{
+            request.getRequestDispatcher("/login.jsp").forward(request, response);
+        }
     }
 
     /**
@@ -51,14 +62,31 @@ public class Login extends HttpServlet {
             throws ServletException, IOException {
         String email = request.getParameter("email");
         String password = request.getParameter("pw");
+        Student loginUser = this.loginUser(email, password);
+        if(loginUser != null){
+            if(loginUser.getStatusString().equals(Student.PENDING)){
+                request.getSession().setAttribute("msg", "Your account is still pending for acceptance. Please try again later.");
+                response.sendRedirect("Login");
+            }else{
+                request.getSession().setAttribute("loginUser", loginUser);
+                if(loginUser.getUserType().equals("admin")){
+                    response.sendRedirect("AdminMain");
+                }else if(loginUser.getUserType().equals("student")){
+                    response.sendRedirect("StudentMain");
+                }
+            }
+        }else{
+            request.getSession().setAttribute("msg", "Email or Password is wrong. Please try again.");
+            response.sendRedirect("Login");
+        }
     }
     
-    private Student loginStudent(String email, String password){
+    private Student loginUser(String email, String password){
         Student loginUser = null;
         Connection conn = null;
         PreparedStatement pStmt = null;
         ResultSet rs = null;
-        String sql = "SELECT		STUDENTEMAIL, USERNAME, PASSWORD, LASTNAME, FIRSTNAME, PROGRAM, STATUS, ABOUT, PROFILEPIC, USERTYPE "
+        String sql = "SELECT		STUDENTEMAIL, USERNAME, LASTNAME, FIRSTNAME, PROGRAM, STATUS, ABOUT, PROFILEPIC, USERTYPE "
                    + "FROM		STUDENTS "
                    + "WHERE		STUDENTEMAIL = ? AND PASSWORD = ?;";
         
@@ -70,7 +98,16 @@ public class Login extends HttpServlet {
             rs = pStmt.executeQuery();
             
             if(rs.next()){
-                
+                String studentEmail = rs.getString("STUDENTEMAIL");
+                String username = rs.getString("USERNAME");
+                String lastname = rs.getString("LASTNAME");
+                String firstname = rs.getString("FIRSTNAME");
+                String programName = rs.getString("PROGRAM");
+                int status = rs.getInt("STATUS");
+                String about = rs.getString("ABOUT");
+                String profilePic = rs.getString("PROFILEPIC");
+                String userType = rs.getString("USERTYPE");
+                loginUser = new Student(studentEmail, username, lastname, firstname, programName, status, about, profilePic, userType, conn, pStmt, rs);
             }else{
                 loginUser = null;
             }

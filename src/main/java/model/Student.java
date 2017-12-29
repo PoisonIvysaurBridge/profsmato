@@ -139,6 +139,38 @@ public class Student {
         this.contacts = new ArrayList<>();
         this.retrieveStudent(studentEmail, conn, pStmt, rs);
     }
+
+    /**
+     * Constructor for LOGING IN.
+     * @param studentEmail retrieved email
+     * @param username retrieved username
+     * @param lastname retrieved lastname
+     * @param firstname retrieved firstname
+     * @param program retrieved program in string
+     * @param status retrieved status
+     * @param about retrieved about
+     * @param profilePicture retrieved profile picture
+     * @param userType retrieved user type
+     * @param conn continued connection
+     * @param pStmt continued prepared statement
+     * @param rs continued result set
+     * @throws SQLException thrown by SQL.
+     */
+    public Student(String studentEmail, String username, String lastname, String firstname, 
+            String program, int status, String about, String profilePicture, String userType,
+            Connection conn, PreparedStatement pStmt, ResultSet rs) throws SQLException {
+        this.studentEmail = studentEmail;
+        this.username = username;
+        this.lastname = lastname;
+        this.firstname = firstname;
+        this.program = new Degree(program, conn, pStmt, rs);
+        this.status = status;
+        this.about = about;
+        this.profilePicture = profilePicture;
+        this.userType = userType;
+    }
+    
+    
     // </editor-fold>
     
     // <editor-fold defaultstate="collapsed" desc="Methods of Student object.">

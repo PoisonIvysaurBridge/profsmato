@@ -5,6 +5,9 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%
+String msg = (String) session.getAttribute("msg");
+%>
 <!DOCTYPE html>
 <html>
     <head>
@@ -78,7 +81,10 @@
                         <div class="card text-white p-5 bg-success" id="logincard">
                             <img src="/Profsmato/assets/designs/logobanner.png" style="width:100%;" />
                             <div class="card-body">
-                                <form action="#" method="post">
+                                <% if(msg != null){ %>
+                                <h2><%= msg %></h2>
+                                <% } %>
+                                <form action="Login" method="post">
                                     <div class="form-group">
                                         <label class="text-white">Email address</label>
                                         <input type="email" class="form-control text-white" name="email">
