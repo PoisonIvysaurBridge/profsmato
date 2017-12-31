@@ -1,3 +1,8 @@
+<%@page import="model.Student" %>
+<%
+Student loginUser = (Student) session.getAttribute("loginUser");
+%>
+<form action="Logout" method="post" id="logoutForm"></form>
 <nav class="navbar navbar-expand-md bg-success navbar-dark fixed-top">
     <div class="container">
         <a class="navbar-brand" href="#">Profsmato</a>
@@ -15,19 +20,24 @@
             </ul><!--/.navbar-nav mr-auto-->
             <ul class="navbar-nav navbar-right">
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle text-white" href="#" aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" id="Preview" role="button"> Andrew Santiago </a>
+                    <a class="nav-link dropdown-toggle text-white" href="#" aria-expanded="false" aria-haspopup="true" data-toggle="dropdown" id="Preview" role="button"> <%= loginUser.getFirstname() + " " + loginUser.getLastname() %> </a>
                     <div class="dropdown-menu" aria-labelledby="Preview">
                         <div style="text-align:center;">
                             <img class="rounded-circle" src="/Profsmato/assets/studentpic/andrew.jpg" alt="Generic placeholder image" style="width:64px;">
                             <br /> 
-                            <text>Andrew</text>
+                            <text><%= loginUser.getFirstname()%></text>
                             <hr /> 
                         </div>
                         <a class="dropdown-item" href="#">Profile</a>
-                        <a class="dropdown-item" href="#">Logout</a>
+                        <button class="dropdown-item" id="logoutBtn" onclick="logout()">Logout</button>
                     </div><!--/.dropdown-menu-->
                 </li><!--/.nav-item-->
             </ul><!--/.navbar-nav-->
         </div><!--/.collapse navbar-collapse-->
     </div><!--/.container-->
 </nav><!--/.navbar-->
+<script>
+    function logout(){
+        $('#logoutForm').submit();
+    }
+</script>

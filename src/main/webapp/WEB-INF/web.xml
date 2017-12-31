@@ -15,6 +15,10 @@
         <servlet-name>AdminMain</servlet-name>
         <servlet-class>servlet.AdminMain</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Logout</servlet-name>
+        <servlet-class>servlet.Logout</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>Login</servlet-name>
         <url-pattern>/Login</url-pattern>
@@ -26,6 +30,10 @@
     <servlet-mapping>
         <servlet-name>AdminMain</servlet-name>
         <url-pattern>/AdminMain</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Logout</servlet-name>
+        <url-pattern>/Logout</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
