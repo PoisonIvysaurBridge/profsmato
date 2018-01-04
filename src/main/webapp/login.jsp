@@ -97,7 +97,7 @@ String msg = (String) session.getAttribute("msg");
                                     <a href="SignUp" class="btn btn-md btn-secondary btn-raised">SIGN UP</a>
                                 </form>
                                 <!--card-body-->
-                                <div class="card-footer" id="logincardfooter" style="text-align:center;">Profsmato is brought to you by Phantom Five Dev Team, ©2017.</div>
+                                <div class="card-footer" id="logincardfooter" style="text-align:center;">Profsmato is brought to you by ArrayLIST Dev Team, ©2017.</div>
                             </div><!--/.card-body-->
                         </div><!--/#logincard-->
                     </div><!--/.col-md-6-->
